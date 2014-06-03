@@ -3,6 +3,7 @@ package edu.buaa.vehiclemanagementsystem.util.environment;
 public class Enviroment {
 
 	private static final String SCHEME = "http";
+	//TODO
 	private static final String HOST = "202.142.21.121";
 
 	// public static final int PORT = 9001;
