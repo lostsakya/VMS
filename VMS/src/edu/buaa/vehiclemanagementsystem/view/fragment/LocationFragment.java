@@ -133,8 +133,8 @@ public class LocationFragment extends BaseFragment implements Listener<String>,
 		String data = jlyId + "!" + startTime + "!" + endTime + "!" + filterStopPoint
 				+ "!" + index + "!" + itemPerPage;
 		Parameter parameter = new Parameter(8, 1, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
-		request = new StringRequest(Enviroment.URL, new Listener<String>() {
+		String url =  Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
+		request = new StringRequest( Enviroment.getInstance().getUrl(), new Listener<String>() {
 
 			@Override
 			public void onResponse(String response) {

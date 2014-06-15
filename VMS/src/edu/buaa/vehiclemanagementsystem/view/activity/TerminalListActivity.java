@@ -1,5 +1,14 @@
 package edu.buaa.vehiclemanagementsystem.view.activity;
 
+import android.view.View;
+import android.view.ViewGroup;
+
+import android.content.Intent;
+import android.text.Html;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,14 +16,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
-
-import android.content.Intent;
-import android.text.Html;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.AuthFailureError;
@@ -51,70 +52,58 @@ public class TerminalListActivity extends BaseActivity {
 	void request() {
 		String data = null;
 		Parameter parameter = new Parameter(8, 2, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
-		DStringRequest request = new DStringRequest(url,
-				new Listener<String>() {
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
+		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 
-					@Override
-					public void onResponse(String response) {
-						try {
-							Result result = JSON.parseObject(response,
-									Result.class);
-							LogUtil.log(TAG, result.toString());
-							switch (result.getResultId()) {
-							case 1:
-								ToastUtil.shortToast(getApplicationContext(),
-										"下载全部车辆信息成功");
-								LogUtil.log(TAG, "下载全部车辆信息成功");
-								String data = result.getDataList();
-								LogUtil.log(TAG, data);
-								vehicles = Parser.parseVehicles(data);
-								LogUtil.log(TAG, vehicles.toString());
-								lv.setAdapter(new VehiclesAdapter(vehicles));
-								break;
-							case 0:
-								ToastUtil.shortToast(getApplicationContext(),
-										"下载全部车辆信息失败");
-								LogUtil.log(TAG, "下载全部车辆信息失败");
-								break;
-							case 2:
-								ToastUtil.shortToast(getApplicationContext(),
-										"未登录");
-								LogUtil.log(TAG, "未登录");
-								break;
-							default:
-								break;
-							}
+			@Override
+			public void onResponse(String response) {
+				try {
+					Result result = JSON.parseObject(response, Result.class);
+					LogUtil.log(TAG, result.toString());
+					switch (result.getResultId()) {
+					case 1:
+						ToastUtil.shortToast(getApplicationContext(), "下载全部车辆信息成功");
+						LogUtil.log(TAG, "下载全部车辆信息成功");
+						String data = result.getDataList();
+						LogUtil.log(TAG, data);
+						vehicles = Parser.parseVehicles(data);
+						LogUtil.log(TAG, vehicles.toString());
+						lv.setAdapter(new VehiclesAdapter(vehicles));
+						break;
+					case 0:
+						ToastUtil.shortToast(getApplicationContext(), "下载全部车辆信息失败");
+						LogUtil.log(TAG, "下载全部车辆信息失败");
+						break;
+					case 2:
+						ToastUtil.shortToast(getApplicationContext(), "未登录");
+						LogUtil.log(TAG, "未登录");
+						break;
+					default:
+						break;
+					}
 
-						} catch (Exception e) {
-							ToastUtil.longToast(getApplicationContext(),
-									"服务端数据解析异常");
-						}
-					}
-				}, new ErrorListener() {
-					@Override
-					public void onErrorResponse(VolleyError error) {
-						if (error instanceof NoConnectionError) {
-							ToastUtil.longToast(getApplicationContext(),
-									"无网络连接");
-						} else if (error instanceof NetworkError) {
-							ToastUtil
-									.longToast(getApplicationContext(), "网络异常");
-						} else if (error instanceof ParseError) {
-							ToastUtil.longToast(getApplicationContext(),
-									"服务端数据解析异常");
-						} else if (error instanceof ServerError) {
-							ToastUtil.longToast(getApplicationContext(),
-									"服务器异常");
-						} else if (error instanceof TimeoutError) {
-							ToastUtil
-									.longToast(getApplicationContext(), "连接超时");
-						} else if (error instanceof AuthFailureError) {
-							ToastUtil
-									.longToast(getApplicationContext(), "授权异常");
-						}
-					}
-				});
+				} catch (Exception e) {
+					ToastUtil.longToast(getApplicationContext(), "服务端数据解析异常");
+				}
+			}
+		}, new ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				if (error instanceof NoConnectionError) {
+					ToastUtil.longToast(getApplicationContext(), "无网络连接");
+				} else if (error instanceof NetworkError) {
+					ToastUtil.longToast(getApplicationContext(), "网络异常");
+				} else if (error instanceof ParseError) {
+					ToastUtil.longToast(getApplicationContext(), "服务端数据解析异常");
+				} else if (error instanceof ServerError) {
+					ToastUtil.longToast(getApplicationContext(), "服务器异常");
+				} else if (error instanceof TimeoutError) {
+					ToastUtil.longToast(getApplicationContext(), "连接超时");
+				} else if (error instanceof AuthFailureError) {
+					ToastUtil.longToast(getApplicationContext(), "授权异常");
+				}
+			}
+		});
 		mRequestQueue.add(request);
 	}
 
@@ -129,7 +118,7 @@ public class TerminalListActivity extends BaseActivity {
 
 	class VehiclesAdapter extends BaseAdapter {
 
-		private List list;
+		private final List list;
 
 		public VehiclesAdapter(List list) {
 			this.list = list;
@@ -156,10 +145,8 @@ public class TerminalListActivity extends BaseActivity {
 			Holder holder;
 			if (convertView == null) {
 				holder = new Holder();
-				convertView = View.inflate(getApplication(), R.layout.item,
-						null);
-				holder.license = (TextView) convertView
-						.findViewById(R.id.tv_item);
+				convertView = View.inflate(getApplication(), R.layout.item, null);
+				holder.license = (TextView) convertView.findViewById(R.id.tv_item);
 				convertView.setTag(holder);
 			} else {
 				holder = (Holder) convertView.getTag();

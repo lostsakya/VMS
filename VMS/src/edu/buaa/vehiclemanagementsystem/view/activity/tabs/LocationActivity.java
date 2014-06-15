@@ -1,12 +1,12 @@
 package edu.buaa.vehiclemanagementsystem.view.activity.tabs;
 
-import java.util.ArrayList;
-
-import org.androidannotations.annotations.EActivity;
-
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import java.util.ArrayList;
+
+import org.androidannotations.annotations.EActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.amap.api.maps2d.AMap;
@@ -61,7 +61,7 @@ public class LocationActivity extends BaseActivity {
 
 	void request(String data) {
 		Parameter parameter = new Parameter(8, 4, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 
 			@Override

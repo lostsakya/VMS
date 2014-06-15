@@ -1,32 +1,12 @@
 package edu.buaa.vehiclemanagementsystem.view.activity;
 
-import edu.buaa.vehiclemanagementsystem.R;
-import edu.buaa.vehiclemanagementsystem.controller.net.DStringRequest;
-import edu.buaa.vehiclemanagementsystem.controller.parser.Parser;
-import edu.buaa.vehiclemanagementsystem.model.LocusData;
-import edu.buaa.vehiclemanagementsystem.model.Parameter;
-import edu.buaa.vehiclemanagementsystem.model.Result;
-import edu.buaa.vehiclemanagementsystem.util.LogUtil;
-import edu.buaa.vehiclemanagementsystem.util.ToastUtil;
-import edu.buaa.vehiclemanagementsystem.util.environment.Enviroment;
-import edu.buaa.vehiclemanagementsystem.view.activity.base.BaseActivity;
-
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.text.Html;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Response.ErrorListener;
-import com.android.volley.Response.Listener;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +17,26 @@ import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.ViewById;
 
 import com.alibaba.fastjson.JSON;
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+
+import edu.buaa.vehiclemanagementsystem.R;
+import edu.buaa.vehiclemanagementsystem.controller.net.DStringRequest;
+import edu.buaa.vehiclemanagementsystem.controller.parser.Parser;
+import edu.buaa.vehiclemanagementsystem.model.LocusData;
+import edu.buaa.vehiclemanagementsystem.model.Parameter;
+import edu.buaa.vehiclemanagementsystem.model.Result;
+import edu.buaa.vehiclemanagementsystem.util.LogUtil;
+import edu.buaa.vehiclemanagementsystem.util.ToastUtil;
+import edu.buaa.vehiclemanagementsystem.util.environment.Enviroment;
+import edu.buaa.vehiclemanagementsystem.view.activity.base.BaseActivity;
 
 @EActivity(R.layout.activity_list)
 public class LocationListActivity extends BaseActivity {
@@ -55,7 +55,7 @@ public class LocationListActivity extends BaseActivity {
 	@AfterViews
 	void numberRequest() {
 		Parameter parameter = new Parameter(8, 5, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -111,7 +111,7 @@ public class LocationListActivity extends BaseActivity {
 	@AfterViews
 	void request() {
 		Parameter parameter = new Parameter(8, 6, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -174,7 +174,7 @@ public class LocationListActivity extends BaseActivity {
 
 	class VehiclesAdapter extends BaseAdapter {
 
-		private List list;
+		private final List list;
 
 		public VehiclesAdapter(List list) {
 			this.list = list;

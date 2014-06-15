@@ -1,13 +1,13 @@
 package edu.buaa.vehiclemanagementsystem.view.activity.tabs;
 
+import android.text.Html;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
-
-import android.text.Html;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.AuthFailureError;
@@ -50,7 +50,7 @@ public class StateActivity extends BaseActivity {
 
 	void request(String data) {
 		Parameter parameter = new Parameter(8, 4, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {

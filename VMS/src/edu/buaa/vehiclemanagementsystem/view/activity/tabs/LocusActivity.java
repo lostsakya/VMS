@@ -1,23 +1,15 @@
 package edu.buaa.vehiclemanagementsystem.view.activity.tabs;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-
-import org.androidannotations.annotations.App;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
@@ -27,6 +19,15 @@ import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.androidannotations.annotations.App;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 
 import com.alibaba.fastjson.JSON;
 import com.amap.api.maps2d.AMap;
@@ -126,7 +127,7 @@ public class LocusActivity extends BaseActivity {
 
 	private int size;
 
-	private long FREQUENCY = 1000L;
+	private final long FREQUENCY = 1000L;
 
 	private MarkerOptions markerOptions;
 
@@ -275,7 +276,7 @@ public class LocusActivity extends BaseActivity {
 
 	void request(String data) {
 		Parameter parameter = new Parameter(8, 6, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		DStringRequest request = new DStringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -352,8 +353,7 @@ public class LocusActivity extends BaseActivity {
 		map.addMarker(startMarkerOptions);
 
 		markerOptions = new MarkerOptions();
-		markerOptions.position(startPoint).title(" ").snippet(" ").icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.car)))
-				.anchor(0.5f, 0.5f);
+		markerOptions.position(startPoint).title(" ").snippet(" ").icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.car))).anchor(0.5f, 0.5f);
 		marker = map.addMarker(markerOptions);
 		addBound(startPoint);
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(startPoint, ZOOMLEVEL));

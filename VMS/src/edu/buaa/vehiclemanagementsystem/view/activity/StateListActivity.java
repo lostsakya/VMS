@@ -1,23 +1,22 @@
 package edu.buaa.vehiclemanagementsystem.view.activity;
 
-import edu.buaa.vehiclemanagementsystem.R;
-import edu.buaa.vehiclemanagementsystem.controller.net.DStringRequest;
-import edu.buaa.vehiclemanagementsystem.controller.parser.Parser;
-import edu.buaa.vehiclemanagementsystem.model.Parameter;
-import edu.buaa.vehiclemanagementsystem.model.Result;
-import edu.buaa.vehiclemanagementsystem.model.VehicleStateInfo;
-import edu.buaa.vehiclemanagementsystem.util.LogUtil;
-import edu.buaa.vehiclemanagementsystem.util.ToastUtil;
-import edu.buaa.vehiclemanagementsystem.util.environment.Enviroment;
-import edu.buaa.vehiclemanagementsystem.view.activity.base.BaseActivity;
-
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.text.Html;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ItemClick;
+import org.androidannotations.annotations.ViewById;
+
+import com.alibaba.fastjson.JSON;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -29,15 +28,16 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ItemClick;
-import org.androidannotations.annotations.ViewById;
-
-import com.alibaba.fastjson.JSON;
+import edu.buaa.vehiclemanagementsystem.R;
+import edu.buaa.vehiclemanagementsystem.controller.net.DStringRequest;
+import edu.buaa.vehiclemanagementsystem.controller.parser.Parser;
+import edu.buaa.vehiclemanagementsystem.model.Parameter;
+import edu.buaa.vehiclemanagementsystem.model.Result;
+import edu.buaa.vehiclemanagementsystem.model.VehicleStateInfo;
+import edu.buaa.vehiclemanagementsystem.util.LogUtil;
+import edu.buaa.vehiclemanagementsystem.util.ToastUtil;
+import edu.buaa.vehiclemanagementsystem.util.environment.Enviroment;
+import edu.buaa.vehiclemanagementsystem.view.activity.base.BaseActivity;
 
 @EActivity(R.layout.activity_list)
 public class StateListActivity extends BaseActivity {
@@ -49,7 +49,7 @@ public class StateListActivity extends BaseActivity {
 	void request() {
 		String data = "63332251,63332250";
 		Parameter parameter = new Parameter(8, 4, data);
-		String url = Enviroment.URL + JSON.toJSONString(parameter);
+		String url = Enviroment.getInstance().getUrl() + JSON.toJSONString(parameter);
 		request = new DStringRequest(url, new Listener<String>() {
 			@Override
 			public void onResponse(String response) {
@@ -62,8 +62,7 @@ public class StateListActivity extends BaseActivity {
 						LogUtil.log(TAG, "下载状态信息成功");
 						String data = result.getDataList();
 						LogUtil.log(TAG, data);
-						ArrayList<VehicleStateInfo> vehicles = Parser
-								.parseStateInfo(data);
+						ArrayList<VehicleStateInfo> vehicles = Parser.parseStateInfo(data);
 						LogUtil.log(TAG, vehicles.toString());
 						lv.setAdapter(new VehiclesAdapter(vehicles));
 						break;
@@ -112,7 +111,7 @@ public class StateListActivity extends BaseActivity {
 
 	class VehiclesAdapter extends BaseAdapter {
 
-		private List list;
+		private final List list;
 
 		public VehiclesAdapter(List list) {
 			this.list = list;
